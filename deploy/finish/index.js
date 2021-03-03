@@ -17,7 +17,7 @@ async function run() {
     );
 
     const failedJobs = Object.entries(required_jobs).filter(job => job[1].result==="failure").map(job => job[0]);
-    const success = failedJobs.lenght == 0;
+    const success = (failedJobs.length===0);
 
     await octokit.repos.createDeploymentStatus(
       {
