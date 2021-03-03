@@ -17,17 +17,18 @@ async function run() {
     );
 
     const failedJobs = Object.entries(required_jobs).filter(job => job[1].result==="failure").map(job => job[0]);
-    const failed = failedJobs.lenght == 0;
+    const success = failedJobs.lenght == 0;
 
     await octokit.repos.createDeploymentStatus(
       {
         ...context.repo,
         deployment_id,
-        state: failed ? "success" : "failure",
+        state: success ? "success" : "failure",
         target_url,
       }
     );
-    if (failed) core.setFailed(`There are failed jobs in the workflow: ${failedJobs}`);
+    if (success) core.info("Marking the deployment as successful.")
+    else core.setFailed(`There are failed jobs in the workflow: ${failedJobs}`);
 
   } catch (error) {
     core.error(error);
