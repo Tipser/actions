@@ -16,15 +16,19 @@ async function run() {
       }
     );
 
-    const failedJobs = Object.values(required_jobs).map(job => job.result).some(result => result=="failure")
+    const failedJobs = Object.entries(kek).filter(job => job[1].result==="failure").map(job => job[0]);
+    const failed = failedJobs.lenght == 0;
+
     await octokit.repos.createDeploymentStatus(
       {
         ...context.repo,
         deployment_id,
-        state: failedJobs ? "failure" : "success",
+        state: failed ? "success" : "failure",
         target_url,
       }
     );
+    if (failed) core.setFailed(`There are failed jobs in the workflow: ${failedJobs}`);
+
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);
