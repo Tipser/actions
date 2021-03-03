@@ -5,7 +5,7 @@ inputs:
   deployment_id:
     description: "Id of a deployment to finish"
   required_jobs:
-    description: "List of jobs which cannot result in failure in a form of ${{ toJson(needs) }}"
+    description: "List of jobs which cannot result in a failure. In a form of $_{{ toJson(needs) }}"
 runs:
   using: 'node12'
   main: 'index.js'
