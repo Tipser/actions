@@ -7,7 +7,7 @@ async function run() {
 
     const token = core.getInput("token", {required: true});
     const deployment_id = core.getInput("deployment_id", {required: true});
-    const state = core.getInput("state", {required: true});
+    const required_jobs = JSON.parse(core.getInput("required_jobs", {required: true}));
     const target_url = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
 
     const octokit = github.getOctokit(token,
@@ -16,11 +16,12 @@ async function run() {
       }
     );
 
+    const failedJobs = Object.values(required_jobs).map(job => job.result).some(result => result=="failure")
     await octokit.repos.createDeploymentStatus(
       {
         ...context.repo,
         deployment_id,
-        state,
+        state: failedJobs ? "failure" : "success",
         target_url,
       }
     );

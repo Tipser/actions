@@ -4,8 +4,8 @@ inputs:
     description: 'Github repository token'
   deployment_id:
     description: "Id of a deployment to finish"
-  state:
-    description: "State of the deployment to set"
+  required_jobs:
+    description: "List of jobs which cannot result in failure in a form of ${{ toJson(needs) }}"
 runs:
   using: 'node12'
   main: 'index.js'
