@@ -1,0 +1,11 @@
+name: 'Finish new deployment'
+inputs:
+  token:
+    description: 'Github repository token'
+  deployment_id:
+    description: "Id of a deployment to finish"
+  state:
+    description: "State of the deployment to set"
+runs:
+  using: 'node12'
+  main: 'index.js'
