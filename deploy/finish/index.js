@@ -16,7 +16,7 @@ async function run() {
       }
     );
 
-    const failedJobs = Object.entries(kek).filter(job => job[1].result==="failure").map(job => job[0]);
+    const failedJobs = Object.entries(required_jobs).filter(job => job[1].result==="failure").map(job => job[0]);
     const failed = failedJobs.lenght == 0;
 
     await octokit.repos.createDeploymentStatus(
