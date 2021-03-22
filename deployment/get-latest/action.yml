@@ -1,0 +1,20 @@
+name: Get the latest deployment in the defined state
+inputs:
+  token:
+    description: Github repository token
+  environment:
+    description: Name for the target deployment environment, which can be changed when setting a deploy status.
+  state:
+    description: State of the searched deployment.
+    default: SUCCESS
+  get_input:
+    description: Get input of the workflow run, which set the deployment status
+    default: true
+outputs:
+  deployment_id:
+    description: "Id of the latest deployment with the defined state"
+  log_url:
+    description: "Log URL of the latest deployment with the defined state"
+runs:
+  using: 'node12'
+  main: 'index.js'

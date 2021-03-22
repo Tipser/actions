@@ -1,0 +1,46 @@
+iname: 'Terraform deployment'
+inputs:
+  working_directory:
+    default: .
+  extra_args:
+    default: ""
+  apply:
+    default: false
+  ecs_service_wait:
+    default: false
+runs:
+  using: composite
+  steps:
+    - name: Plan
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        set -euo pipefail
+
+        echo "::group::terragrunt init"
+        terragrunt init
+
+        echo "::group::terragrunt plan"
+        terragrunt plan ${{ inputs.extra_args }} -out tf_plan
+        echo "::endgroup::"
+        terragrunt show tf_plan 2>&1 | grep -Ev '^\[terragrunt\]'
+
+        if [[ '${{ inputs.apply }}' == 'true' ]]; then \
+          echo "::group::terragrunt apply"
+          terragrunt apply tf_plan;
+
+          echo "::group::terragrunt output"
+          tf_output=$(terragrunt output -json)
+
+          if [[ '${{ inputs.ecs_service_wait }}' == 'true' ]]; then \
+            echo "::group::wait for the ECS service stabilization"
+            while :; do echo "Waiting..."; sleep 15; done &
+            aws ecs wait services-stable \
+              --cluster "$(jq -r '.ecs_cluster_arn.value' <<< "${tf_output}")" \
+              --services "$(jq -r '.ecs_service_name.value' <<< "${tf_output}")"
+            kill %
+          fi
+
+        else \
+          echo -e "\n\033[0;33mThe plan application is disabled. Exiting."
+        fi

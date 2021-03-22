@@ -1,0 +1,8 @@
+name: 'Prints and stores workflow inputs'
+inputs:
+  inputs:
+    description: Event inputs to report
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

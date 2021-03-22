@@ -1,0 +1,21 @@
+name: 'Trigger new deployment'
+inputs:
+  token:
+    description: 'Github repository token'
+  workflow_id:
+    description: 'The ID of the workflow. You can also pass the workflow file name as a string.'
+  workflow_ref:
+    description: 'The git reference for the workflow. The reference can be a branch or tag name.'
+  environment:
+    description: 'Name for the target deployment environment'
+  app_version:
+    description: 'Version of apps to deploy'
+  config_version:
+    description: 'Version of config to use. By default the same as app_version.'
+  source:
+    description: 'What/Who triggered a deployment'
+  apply:
+    description: 'Apply the changes. False by default'
+runs:
+  using: 'node12'
+  main: 'index.js'
