@@ -1,0 +1,21 @@
+name: Get the latest deployment in the defined state
+inputs:
+  token:
+    description: Github repository token
+  environment:
+    description: Name for the target deployment environment.
+  lower_environment:
+    description: Name for the environment which deployment is to be promoted
+  app_version:
+    description: Override a version of apps to deploy
+  config_version:
+    description: Override a version of config to use.
+outputs:
+  new_app_version:
+  new_config_version:
+  previous_app_version:
+  previous_config_version:
+  app_version_git_compare:
+runs:
+  using: 'node12'
+  main: 'index.js'
